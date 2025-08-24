@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Outiiil-test
+// @name        Outiiil-test1
 // @author      WhiteRabbit
 // @version     2.2
 // @description Outiil de Hraesvelg Modifié par WhiteRabbit
