@@ -65,8 +65,8 @@ class PageArmee
     $("h3:first").append(` (${numeral(this._armeeTdc.getSommeUnite() + this._armeeDome.getSommeUnite() + this._armeeLoge.getSommeUnite()).format()})</p>`);
 
     // === FLAGS DE NEUTRALISATION ===
-    const DISABLE_ANTISONDE_UI = true;  // neutralise le bouton "Replacer l'armée"
-    const DISABLE_STATS_BLOCK  = true;  // neutralise le bloc récap "Statistiques"
+    const DISABLE_ANTISONDE_UI = true;  // neutralise le bouton "Replacer l'armée" Mettre False pour réactiver
+    const DISABLE_STATS_BLOCK  = true;  // neutralise le bloc récap "Statistiques" Mettre False pour réactiver
 
     // --- Bouton antisonde (neutralisé si DISABLE_ANTISONDE_UI === true) ---
     if (!DISABLE_ANTISONDE_UI) {
