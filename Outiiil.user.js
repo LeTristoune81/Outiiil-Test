@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Outiiil-test
 // @author      WhiteRabbit
-// @version     3.3
+// @version     3.4
 // @description Outiil de Hraesvelg Modifié par WhiteRabbit
 // @match       http://*.fourmizzz.fr/*
 // @run-at      document-end
@@ -59,7 +59,7 @@
 // @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Traceur.js
 
 // @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Alliance.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Armee.js
+// @require     https://raw.githubusercontent.com/LeTristoune81/Outiiil-test/refs/heads/main/js/page/Armee.js
 // @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Attaquer.js
 // @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Chat.js
 // @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Commerce.js
