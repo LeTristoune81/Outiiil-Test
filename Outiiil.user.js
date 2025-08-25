@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Outiiil-test1
+// @name        Outiiil-test
 // @author      WhiteRabbit
 // @version     3.0
 // @description Outiil de Hraesvelg Modifié par WhiteRabbit
@@ -10,67 +10,67 @@
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js
 // @require     https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js
 
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/globals/Assets.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/globals/Assets.js
 
-// @require https://raw.githubusercontent.com/LeTristoune81/Outiiil/main/js/boite/ParseurTDC.js
-// @require https://raw.githubusercontent.com/LeTristoune81/Outiiil/main/js/boite/TdcDockInjector.js
-// @require https://raw.githubusercontent.com/LeTristoune81/Outiiil/main/js/boite/Dock.js
-// @require https://raw.githubusercontent.com/LeTristoune81/Outiiil/main/js/boite/MessagerieExport.js
+// @require https://raw.githubusercontent.com/LeTristoune81/Outiiil-test/main/js/boite/ParseurTDC.js
+// @require https://raw.githubusercontent.com/LeTristoune81/Outiiil-test/main/js/boite/TdcDockInjector.js
+// @require https://raw.githubusercontent.com/LeTristoune81/Outiiil-test/main/js/boite/Dock.js
+// @require https://raw.githubusercontent.com/LeTristoune81/Outiiil-test/main/js/boite/MessagerieExport.js
 
 
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/clipboard_1.7.1.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/datatables_1.10.16.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/globalize_0.1.1.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/globalize-locale-fr.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/highcharts_6.0.7.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/highcharts-data.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/highcharts-more.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/highcharts-stock.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/moment_2.19.1.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/moment-duration-format.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/moment-locale-fr.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/numeral_2.0.6.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/lib/numeral-locale-fr.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/clipboard_1.7.1.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/datatables_1.10.16.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/globalize_0.1.1.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/globalize-locale-fr.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/highcharts_6.0.7.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/highcharts-data.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/highcharts-more.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/highcharts-stock.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/moment_2.19.1.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/moment-duration-format.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/moment-locale-fr.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/numeral_2.0.6.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/lib/numeral-locale-fr.js
 
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Alliance.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Armee.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Chasse.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Combat.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Commande.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Convoi.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Joueur.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Parametre.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Traceur.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/TraceurAlliance.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/TraceurJoueur.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/class/Utils.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Alliance.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Armee.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Chasse.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Combat.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Commande.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Convoi.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Joueur.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Parametre.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Traceur.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/TraceurAlliance.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/TraceurJoueur.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/class/Utils.js
 
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Boite.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Chasse.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Combat.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Commande.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/ComptePlus.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Map.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Parametres.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Ponte.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Radar.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Rang.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Rapport.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/boite/Traceur.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Boite.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Chasse.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Combat.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Commande.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/ComptePlus.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Map.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Parametres.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Ponte.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Radar.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Rang.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Rapport.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/boite/Traceur.js
 
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Alliance.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Armee.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Attaquer.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Chat.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Commerce.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Construction.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Description.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Forum.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Laboratoire.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Messagerie.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Profil.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Reine.js
-// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/js/page/Ressource.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Alliance.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Armee.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Attaquer.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Chat.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Commerce.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Construction.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Description.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Forum.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Laboratoire.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Messagerie.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Profil.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Reine.js
+// @require     https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil-test@main/js/page/Ressource.js
 // ==/UserScript==
 /*
  * main.js — version Manitas, adapté GitHub
