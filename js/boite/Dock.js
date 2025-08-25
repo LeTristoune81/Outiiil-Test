@@ -11,8 +11,7 @@
 const SPRITE_MENU_FALLBACK = "images/sprite_menu.png";
 const IMG_SPRITE = (typeof IMG_SPRITE_MENU !== "undefined" && IMG_SPRITE_MENU) ? IMG_SPRITE_MENU : SPRITE_MENU_FALLBACK;
 
-// Icône bouton "Parser TDC" (local dans /images)
-const IMG_RADAR  = "images/radar.png";
+
 
 // ---------- URL Update ----------
 const OUTIIIL_UPDATE_URL = "https://raw.githubusercontent.com/LeTristoune81/Outiiil/main/Outiiil.user.js";
@@ -57,22 +56,27 @@ function o_injectTdcButton($toolbar) {
   if (!$toolbar.length) return;
   if ($toolbar.find("#o_itemTDC").length) return;
 
+  // Utilise le SPRITE (comme Ponte/Chasse/Combat/Préférence), pas le radar
   const $btn = $(`
     <div id="o_toolbarItem5b" class="o_toolbarItem" title="Parser TDC">
       <span id="o_itemTDC"
-            style="display:inline-block;width:28px;height:28px;
-                   background-image:url(${IMG_RADAR});
-                   background-size:contain;background-position:center;background-repeat:no-repeat;"></span>
+            style="display:inline-block;width:32px;height:32px;
+                   background-image:url(${IMG_SPRITE});
+                   background-repeat:no-repeat;background-position:0px -240px;"></span>
     </div>`);
 
-  // placer avant "Préférence" si présent (#o_toolbarItem6), sinon en fin
+  // Placer avant "Préférence" (#o_toolbarItem6) si présent, sinon à la fin
   const $pref = $toolbar.find("#o_toolbarItem6");
   if ($pref.length) $pref.before($btn);
   else $toolbar.append($btn);
 
+
+
+  // Tooltip comme les autres
   const opts = o_isDockBas() ? o_tooltipOptionsBas() : o_tooltipOptionsDroite();
-  $("#o_toolbarItem5b").tooltip(opts);
+  $btn.tooltip(opts);
 }
+
 
 /**
  * Classe Dock
@@ -151,14 +155,14 @@ class Dock {
         case "o_itemChasse":    this._boiteChasse.afficher(); break;
         case "o_itemCombat":    this._boiteCombat.afficher(); break;
         case "o_itemUpdate":    o_openUpdate(); break;
-        case "o_itemTDC":
-          if (window.OutiiilTDC && typeof window.OutiiilTDC.toggle === "function") {
+        case "o_itemTDC": if (window.OutiiilTDC && typeof window.OutiiilTDC.toggle === "function") {
             window.OutiiilTDC.toggle();
           } else {
             console.warn("[Outiiil] Parser TDC introuvable (window.OutiiilTDC).");
             alert("Le parseur TDC (ParseurTDC.js) n'est pas chargé.");
           }
           break;
+
         case "o_itemParametre": this._boiteParametre.afficher(); break;
         default: break;
       }
