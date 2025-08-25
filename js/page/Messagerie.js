@@ -47,41 +47,108 @@ class PageMessagerie
     *
     */
     analyseMessage()
-    {
-        // Listener pour l'ouverture des rapports de combat ou de chasse.
-        $("#corps_messagerie").on("DOMNodeInserted", (e) => {
-            // Si on ouvre le message pour la première fois
-            if($(e.target).hasClass("contenu_conversation")){
-                // correction pour chrome
-                $(".message").removeAttr("colspan");
-                let titreMess = $(e.target).prev().prev().find(".td_objet").text();
-                // Si on est sur des rapports des chasses
-                if(titreMess.includes("chasseuses ont conquis")){
-                    let conv = $(e.target).prev().prev().attr("id").split("_")[1];
-                    $(e.target).find(".message").each((i, elt) => {this.analyseChasse(conv, $(elt).parent().attr("id"), $(elt).text());});
-                    // on affiche un bilan que lorsqu'il y a plus d'une chasse
-                    if($(e.target).find(".message").length > 1) this.analyseChasses(conv);
-                // Si on est sur des rapports de combat
-                }else if(titreMess.includes("Attaque réussie") || titreMess.includes("Attaque échouée") || titreMess.includes("Invasion") || titreMess.includes("Rebellion")){
-                    $(e.target).find(".message").each((i, elt) => {this.analyseCombat($(elt).parent().attr("id"), $(elt).prev().text(), $(elt).text());});
-                    this.optionMessage($(e.target).find(".message:first").parent().attr("id"));
-                }
-                // Ajout des balises de mise en forme pour envoyer des messages
-                if($(e.target).find("div[id^='champ_bbcode_']").length && !Utils.comptePlus)
-                    this.plus($(e.target).find("div[id^='champ_bbcode_']").attr("id").match(/\d+$/));
-            }
-            // Si on affiche plus de message
-            else if($(e.target).attr("id") && $(e.target).attr("id").includes("message_")){
-                // Si on affiche plus de message d'un rapport de chasse
-                if($(e.target).closest(".contenu_conversation").prev().prev().find(".td_objet").text().includes("chasseuses ont conquis")){
-                    let conv = $(e.target).parents().eq(3).prevAll().eq(1).attr("id").split("_")[1];
-                    this.analyseChasse(conv, $(e.target).find(".message").parent().attr("id"), $(e.target).find(".message").text()).analyseChasses(conv);
-                }
-            }
-            if($(e.target).attr("id") && $(e.target).attr("id").includes("liste_conversations"))
-                this.couleurMessage();
+{
+    // Racine d’observation (si l’ID change côté site, on retombe sur body)
+    const root = document.querySelector('#corps_messagerie') || document.body;
+
+    // Détections plus robustes des titres
+    const isChasse = (t) => /chasseuses?.*ont conquis/i.test(t);
+    const isCombat = (t) => /(Attaque\s+(réussie|échouée)|Invasion|Reb[ée]llion)/i.test(t);
+
+    // Toggle “blind” fallback si jQuery UI n’est pas chargé
+    const safeToggle = ($el) => {
+        try { $el.toggle('blind', 400); } catch (e) { $el.toggle(); }
+    };
+
+    // Traite une conversation rendue (injection du petit bouton + détails)
+    const processConversation = (convEl) => {
+        const $c = $(convEl);
+
+        // correction Chrome historique
+        $(".message", $c).removeAttr("colspan");
+
+        const $header = $c.prev().prev();
+        const titre   = $header.find(".td_objet").text();
+
+        if (isChasse(titre)) {
+            const conv = $header.attr("id").split("_")[1];
+            $c.find(".message").each((i, msg) => {
+                const $msg = $(msg).parent();
+                this.analyseChasse(conv, $msg.attr("id"), $(msg).text());
+            });
+            if ($c.find(".message").length > 1) this.analyseChasses(conv);
+
+        } else if (isCombat(titre)) {
+            $c.find(".message").each((i, msg) => {
+                const $row = $(msg).parent();
+                this.analyseCombat($row.attr("id"), $(msg).prev().text(), $(msg).text());
+            });
+            this.optionMessage($c.find(".message:first").parent().attr("id"));
+        }
+
+        // Ajout des outils d’édition (gras, italique, couleurs, smileys)
+        if ($c.find("div[id^='champ_bbcode_']").length && !Utils.comptePlus) {
+            this.plus($c.find("div[id^='champ_bbcode_']").attr("id").match(/\d+$/));
+        }
+
+        // Sécurise les clics +/– si jQuery UI n’est pas présent
+        $c.find("[id^='show_info_']").off("click").on("click", (e) => {
+            const $btn = $(e.currentTarget);
+            $btn.text($btn.text() == "+" ? "-" : "+");
+            // suivant le contexte, le div d’info est soit next(), soit parent().next()
+            const $info = $btn.next().is(".info_supp") ? $btn.next() : $btn.parent().next();
+            safeToggle($info);
         });
-    }
+    };
+
+    // 1) Passage initial (si la conversation est déjà ouverte au chargement)
+    $(".contenu_conversation").each((_, el) => processConversation(el));
+
+    // 2) Observation des ajouts
+    const obs = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+            for (const n of m.addedNodes || []) {
+                if (n.nodeType !== 1) continue;
+
+                // Conversation entière ajoutée
+                if (n.classList && n.classList.contains("contenu_conversation")) {
+                    processConversation(n);
+                    continue;
+                }
+
+                // Messages ajoutés à chaud dans une conversation déjà ouverte (ex: "afficher plus")
+                if (n.id && n.id.startsWith("message_")) {
+                    const $conv = $(n).closest(".contenu_conversation");
+                    if ($conv.length) {
+                        const $header = $conv.prev().prev();
+                        const titre   = $header.find(".td_objet").text();
+
+                        if (isChasse(titre)) {
+                            const conv = $header.attr("id").split("_")[1];
+                            const $msg = $(n).find(".message");
+                            this.analyseChasse(conv, $msg.parent().attr("id"), $msg.text()).analyseChasses(conv);
+                        } else if (isCombat(titre)) {
+                            const $msg = $(n).find(".message");
+                            this.analyseCombat($(n).attr("id"), $msg.prev().text(), $msg.text());
+                            this.optionMessage($(n).attr("id"));
+                        }
+                    }
+                }
+
+                // Si un wrapper plus large est ajouté, on cherche dedans
+                $(n).find(".contenu_conversation").each((_, el) => processConversation(el));
+
+                // Rafraîchit le code couleur quand la liste des conversations est ré-injectée
+                if (n.id && n.id.includes("liste_conversations")) {
+                    this.couleurMessage();
+                }
+            }
+        }
+    });
+
+    obs.observe(root, { childList: true, subtree: true });
+}
+
     /**
     *
     */
