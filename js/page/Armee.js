@@ -54,45 +54,72 @@ class PageArmee
     *
     */
     executer()
-    {
-        this.recupereArmeeTdc();
-        this.recupereArmeeDome();
-        this.recupereArmeeLoge();
-        // Affichage du nombre d'attaque restante
-        $("h3:eq(2)").append(` ${this._nbAttaque}, reste : ${(monProfil.niveauRecherche[6] + 1 - this._nbAttaque)}.</p>`);
-        // Affichage du nombre total d'unité
-        $("h3:first").append(` (${numeral(this._armeeTdc.getSommeUnite() + this._armeeDome.getSommeUnite() + this._armeeLoge.getSommeUnite()).format()})</p>`);
-        // Bouton antisonde
+{
+    // --- Récupération des armées ---
+    this.recupereArmeeTdc();
+    this.recupereArmeeDome();
+    this.recupereArmeeLoge();
+
+    // --- Petits compteurs en en-tête ---
+    $("h3:eq(2)").append(` ${this._nbAttaque}, reste : ${(monProfil.niveauRecherche[6] + 1 - this._nbAttaque)}.</p>`);
+    $("h3:first").append(` (${numeral(this._armeeTdc.getSommeUnite() + this._armeeDome.getSommeUnite() + this._armeeLoge.getSommeUnite()).format()})</p>`);
+
+    // === FLAGS DE NEUTRALISATION ===
+    const DISABLE_ANTISONDE_UI = true;  // neutralise le bouton "Replacer l'armée"
+    const DISABLE_STATS_BLOCK  = true;  // neutralise le bloc récap "Statistiques"
+
+    // --- Bouton antisonde (neutralisé si DISABLE_ANTISONDE_UI === true) ---
+    if (!DISABLE_ANTISONDE_UI) {
         $(".simulateur:eq(0) tr:eq(0)").after(`<tr><td colspan="10" class='right'><button id='o_replaceArmee' class='o_button f_success'>Replacer l'armée</button></td></tr>`);
         $("#o_replaceArmee").click(() => {
-            if(this._armeeLoge.getSommeUnite() + this._armeeDome.getSommeUnite() + this._armeeTdc.getSommeUnite()){
+            if (this._armeeLoge.getSommeUnite() + this._armeeDome.getSommeUnite() + this._armeeTdc.getSommeUnite()) {
                 let premiereUnite = this.indicePremiereUnite();
                 let nbUniteDispo = this._armeeLoge.unite[premiereUnite] + this._armeeDome.unite[premiereUnite] + this._armeeTdc.unite[premiereUnite];
                 // si j'ai assez d'unité pour mettre les antisonde en param
-                if(nbUniteDispo >= monProfil.parametre["uniteAntisondeDome"].valeur + monProfil.parametre["uniteAntisondeTerrain"].valeur){
-                    // si les unités en terrain et dome ne sont pas dans les bornes dasn antisonde on replace tout sinon on est bon
-                    if(!this.estPlacePourAntiSonde(premiereUnite, monProfil.parametre["uniteAntisondeTerrain"].valeur, monProfil.parametre["uniteAntisondeDome"].valeur))
+                if (nbUniteDispo >= monProfil.parametre["uniteAntisondeDome"].valeur + monProfil.parametre["uniteAntisondeTerrain"].valeur) {
+                    // si les unités en terrain et dome ne sont pas dans les bornes dans antisonde on replace tout sinon on est bon
+                    if (!this.estPlacePourAntiSonde(premiereUnite, monProfil.parametre["uniteAntisondeTerrain"].valeur, monProfil.parametre["uniteAntisondeDome"].valeur))
                         this.placerAntisondeSuffisant(premiereUnite, nbUniteDispo);
                     else
-                        $.toast({...TOAST_INFO, text : "Votre armée est déjà placée correctement."});
-                }else{
-                    if(!this.estPlacePourAntiSonde(premiereUnite, 1, nbUniteDispo * 0.3))
+                        $.toast({ ...TOAST_INFO, text: "Votre armée est déjà placée correctement." });
+                } else {
+                    if (!this.estPlacePourAntiSonde(premiereUnite, 1, nbUniteDispo * 0.3))
                         this.placerAntisondeInsuffisant(premiereUnite, nbUniteDispo);
                     else
-                        $.toast({...TOAST_INFO, text : "Votre armée est déjà placée correctement."});
+                        $.toast({ ...TOAST_INFO, text: "Votre armée est déjà placée correctement." });
                 }
-            }else
-                $.toast({...TOAST_ERROR, text : "Aucune unité n'est transférable."});
+            } else
+                $.toast({ ...TOAST_ERROR, text: "Aucune unité n'est transférable." });
             return false;
         });
-
-        if(!Utils.comptePlus) this.plus();
-        // Affichage du temps Hof de votre armée
-        $(".simulateur:first").append("<tr><td colspan=10>Temps <span class='gras' title='Hall Of Fame' >HOF : " + Utils.shortcutTime(this._armeeTdc.getTemps(0) + this._armeeDome.getTemps(0) + this._armeeLoge.getTemps(0)) + "</span>, Temps relatif : <span class='gras'>" + Utils.shortcutTime(this._armeeTdc.getTemps(monProfil.getTDP()) + this._armeeDome.getTemps(monProfil.getTDP()) + this._armeeLoge.getTemps(monProfil.getTDP())) + "</span></td></tr>");
-        // Affichage des statistiques detaillés
-        this.afficherStatistique();
-        return this;
+    } else {
+        // Par précaution : si un autre script l’a déjà injecté, on le retire.
+        $("#o_replaceArmee").closest("tr").remove();
     }
+
+    // --- Fonctions compte+ (on les conserve) ---
+    if (!Utils.comptePlus) this.plus();
+
+    // --- Temps HOF (on conserve) ---
+    $(".simulateur:first").append(
+        "<tr><td colspan=10>Temps <span class='gras' title='Hall Of Fame' >HOF : " +
+        Utils.shortcutTime(this._armeeTdc.getTemps(0) + this._armeeDome.getTemps(0) + this._armeeLoge.getTemps(0)) +
+        "</span>, Temps relatif : <span class='gras'>" +
+        Utils.shortcutTime(this._armeeTdc.getTemps(monProfil.getTDP()) + this._armeeDome.getTemps(monProfil.getTDP()) + this._armeeLoge.getTemps(monProfil.getTDP())) +
+        "</span></td></tr>"
+    );
+
+    // --- Bloc récap "Statistiques" (neutralisé si DISABLE_STATS_BLOCK === true) ---
+    if (!DISABLE_STATS_BLOCK) {
+        this.afficherStatistique();
+    } else {
+        // Si déjà présent pour une raison quelconque, on nettoie.
+        $("#o_statArmee").remove();
+    }
+
+    return this;
+}
+
     /**
 	* Initialise l'armée en terrain de chasse.
     *
