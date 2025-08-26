@@ -1,0 +1,10 @@
+﻿node_modules/
+npm-debug.log*
+*.log
+
+# On garde dist/outiiil.bundle.js et Outiiil.loader.user.js
+# On ignore juste d'éventuelles sourcemaps
+dist/**/*.map
+
+.DS_Store
+Thumbs.db
