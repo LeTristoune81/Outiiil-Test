@@ -1,1 +1,104 @@
-!function(){"use strict";console.log("[Outiiil] bundle chargé");["https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/css/outiiil.css","https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/css/toasts.css","https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/css/datatables.css"].forEach(function(e){var r=document.createElement("link"),t=document.getElementsByTagName("head")[0];r.setAttribute("rel","stylesheet"),r.setAttribute("type","text/css"),r.setAttribute("href",e),t.appendChild(r)});const e=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],r=["Janv.","Févr.","Mars","Avril","Mai","Juin","Juil.","Août","Sept.","Oct.","Nov.","Déc."],t=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];"Connexion"!=$(".boite_connexion_titre:first").text()&&($("head").append("<link rel='stylesheet' href='http://code.jquery.com/ui/1.12.1/themes/humanity/jquery-ui.min.css'/>"),numeral.locale("fr"),moment.locale("fr"),Highcharts.setOptions({lang:{months:e,shortMonths:r,weekdays:t,decimalPoint:",",thousandsSep:" "}}),$.fn.dataTable.ext.type.order["quantite-grade-pre"]=e=>parseInt(e.replace(/\s/g,"")),$.fn.dataTable.ext.type.order["moment-D MMM YYYY-pre"]=e=>moment(e.replace(".",""),"D MMM YYYY","fr",!0).unix(),$.fn.dataTable.ext.type.order["time-unformat-pre"]=e=>Utils.timeToInt(e),monProfil=new Joueur({pseudo:$("#pseudo").text()}),monProfil.getParametre(),Promise.all([monProfil.getConstruction(),monProfil.getLaboratoire(),monProfil.getProfilCourant()]).then(e=>{e[0]&&monProfil.chargerConstruction(e[0]),e[1]&&monProfil.chargerRecherche(e[1]),e[2]&&monProfil.chargerProfil(e[2]),(new Dock).afficher();let r=new BoiteComptePlus;r.afficher();let t=new BoiteRadar;t.afficher(),monProfil.parametre.cleTraceur.valeur&&(new TraceurJoueur(monProfil.parametre.etatTraceurJoueur.valeur,monProfil.parametre.intervalleTraceurJoueur.valeur,monProfil.parametre.nbPageTraceurJoueur.valeur).tracer(),new TraceurAlliance(monProfil.parametre.etatTraceurAlliance.valeur,monProfil.parametre.intervalleTraceurAlliance.valeur).tracer());let a=location.pathname,n=null;switch(!0){case"/Reine.php"==a:n=new PageReine(r),Utils.comptePlus||n.plus();break;case"/construction.php"==a:n=new PageConstruction(r),n.executer();break;case"/laboratoire.php"==a:n=new PageLaboratoire(r),n.executer();break;case"/Ressources.php"==a:n=new PageRessource(r),n.executer();break;case"/Armee.php"==a:n=new PageArmee(r),n.executer();break;case"/commerce.php"==a:n=new PageCommerce(r),n.executer();break;case"/messagerie.php"==a:n=new PageMessagerie,n.executer(),window.BoiteMessagerieExport?.boot?.();break;case"/alliance.php"==a&&""==location.search:case"/chat.php"==a:n=new PageChat,n.executer();break;case location.href.indexOf("/alliance.php?forum_menu")>0:n=new PageForum,n.executer();break;case location.href.indexOf("/alliance.php?Membres")>0:n=new PageAlliance,n.executer();break;case location.href.indexOf("/Membre.php?Pseudo")>0:case"/Membre.php"==a:n=new PageProfil(t),n.executer();break;case"/classementAlliance.php"==a&&""!=Utils.extractUrlParams().alliance&&null!=Utils.extractUrlParams().alliance:n=new PageDescription(t),n.executer();break;case location.href.indexOf("/ennemie.php?Attaquer")>0:case location.href.indexOf("/ennemie.php?annuler")>0:n=new PageAttaquer(r),n.executer();break;case"/ennemie.php"==a&&""==location.search:$("#tabEnnemie tr:eq(0) th:eq(5)").after("<th class='centre'>Temps</th>"),$("#tabEnnemie tr:gt(0)").each((e,r)=>{let t=parseInt($(r).find("td:eq(5)").text());$(r).find("td:eq(5)").after(`<td class='centre'>${Utils.intToTime(Math.ceil(637200*Math.pow(.9,monProfil.niveauRecherche[6])*(1-Math.exp(-t/350))))}</td>`)})}}))}();
+// dist/outiiil.bundle.js
+(function () {
+  'use strict';
+  const VERSION = 'minimal-anti-joueur-1';
+  console.log('[Outiiil] bundle chargé :: ' + VERSION);
+
+  // Injecter quelques CSS externes (facultatif)
+  const CSS_URLS = [
+    'https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/css/outiiil.css',
+    'https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/css/toasts.css',
+    'https://cdn.jsdelivr.net/gh/LeTristoune81/Outiiil@main/css/datatables.css',
+  ];
+  CSS_URLS.forEach((href) => {
+    try {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = href;
+      (document.head || document.documentElement).appendChild(link);
+    } catch (e) { /* ignore */ }
+  });
+
+  // Utils internes
+  const norm = (s) => (s || '').replace(/\s+/g, ' ').trim();
+  const lower = (s) => norm(s).toLowerCase();
+
+  // Désactive tout bouton/lien "Replacer l’armée" (avec ' ou ’)
+  function neutraliseBoutonReplacer() {
+    const already = new WeakSet();
+    const matchesText = (txt) => {
+      const x = lower(txt);
+      return x === "replacer l’armée" || x === "replacer l'armée";
+    };
+    const testEl = (el) => {
+      if (already.has(el)) return;
+      const t = norm(el.textContent || '');
+      const v = norm(el.value || '');
+      if (matchesText(t) || matchesText(v)) {
+        el.style.pointerEvents = 'none';
+        el.style.opacity = '0.5';
+        el.style.filter = 'grayscale(1)';
+        el.title = 'Désactivé par Outiiil';
+        if ('disabled' in el) el.disabled = true;
+        el.addEventListener('click', (e) => { e.preventDefault(); e.stopImmediatePropagation(); }, true);
+        el.setAttribute('data-outiiil-disabled', '1');
+        already.add(el);
+      }
+    };
+    document.querySelectorAll('a,button,input[type=submit],input[type=button]').forEach(testEl);
+  }
+
+  // Masque le bloc "Statistiques" (repère un titre puis cache le conteneur)
+  function masqueBlocStatistiques() {
+    const looksLikeHeading = (el) => lower(el.textContent).startsWith('statistiques');
+    let heading = Array.from(document.querySelectorAll('h1,h2,h3,h4,legend,.titre,.title,.header'))
+      .find(looksLikeHeading);
+
+    if (heading) {
+      const container = heading.closest('section,fieldset,div,table') || heading.parentElement;
+      if (container && !container.hasAttribute('data-outiiil-hidden')) {
+        container.style.display = 'none';
+        container.setAttribute('data-outiiil-hidden', '1');
+      }
+    } else {
+      // fallback : n'importe quel bloc dont le texte commence par "Statistiques"
+      Array.from(document.querySelectorAll('section,fieldset,div,table')).forEach((el) => {
+        if (!el.hasAttribute('data-outiiil-hidden') && looksLikeHeading(el)) {
+          el.style.display = 'none';
+          el.setAttribute('data-outiiil-hidden', '1');
+        }
+      });
+    }
+  }
+
+  // Lance une passe immédiate
+  function runOnce() {
+    try {
+      neutraliseBoutonReplacer();
+      masqueBlocStatistiques();
+    } catch (e) {
+      console.error('[Outiiil] erreur runOnce', e);
+    }
+  }
+
+  // Re-scan quand la page bouge (Ajax, onglets, etc.)
+  const debounced = (fn, delay = 200) => {
+    let t = 0;
+    return () => { clearTimeout(t); t = setTimeout(fn, delay); };
+  };
+  const runDebounced = debounced(runOnce, 200);
+
+  function boot() {
+    runOnce();
+    const obs = new MutationObserver(runDebounced);
+    obs.observe(document.documentElement, { childList: true, subtree: true });
+    window.__outiiil_obs = obs; // juste pour debug
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
