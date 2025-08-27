@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Outiiil loader
 // @namespace    https://github.com/LeTristoune81
-// @version      0.2
+// @version      0.6
 // @description  Charge le bundle Outiiil
 // @match        http://s1.fourmizzz.fr/*
 // @match        http://s2.fourmizzz.fr/*
